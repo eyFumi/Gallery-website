@@ -36,8 +36,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Jika file baru diunggah, lakukan pemindahan file
     if (!empty($lokasi_file)) {
+        // Mengambil ekstensi file
+        $imageFileType = strtolower(pathinfo($lokasi_file, PATHINFO_EXTENSION));
+        
+        // Membuat nama file baru yang unik
+        $newFileName = uniqid('photo_', true) . '.' . $imageFileType;
+        $targetDir = "uploads/";
+        $targetFile = $targetDir . $newFileName;
+
         // Simpan file ke direktori yang diinginkan
-        move_uploaded_file($_FILES['lokasi_file']['tmp_name'], "uploads/" . $lokasi_file);
+        if (move_uploaded_file($_FILES['lokasi_file']['tmp_name'], $targetFile)) {
+            // Hapus file lama jika file baru diupload
+            if (!empty($photo['LokasiFile']) && file_exists($photo['LokasiFile'])) {
+                unlink($photo['LokasiFile']);
+            }
+
+            // Update lokasi file baru ke database
+            $lokasi_file = $targetFile;
+        } else {
+            echo "Terjadi kesalahan saat mengunggah file.";
+            $lokasi_file = $photo['LokasiFile']; // Kembali ke lokasi file lama jika gagal upload
+        }
     } else {
         // Jika tidak ada file baru, tetap menggunakan lokasi file lama
         $lokasi_file = $photo['LokasiFile'];
@@ -47,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_update = $pdo->prepare("UPDATE gallery_foto SET JudulFoto = ?, DeskripsiFoto = ?, LokasiFile = ? WHERE FotoID = ?");
     $stmt_update->execute([$judul, $deskripsi, $lokasi_file, $foto_id]);
 
+    // Redirect ke halaman photos.php setelah berhasil diupdate
     header("Location: photos.php?message=Foto berhasil diupdate");
     exit();
 }

@@ -19,20 +19,28 @@
             <li class="nav-item">
                 <a class="nav-link" href="album.php">Album</a>
             </li>
+            
+            <div class="dropdown dropleft">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user"></i>
+            </button>
+            <div class="dropdown-menu me-4">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <?php if ($_SESSION['user_level'] === 'Admin'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin-dashboard.php">Admin</a>
-                    </li>
+                    
+                        <a class="dropdown-item" href="dashboard.php">Admin</a>
+                    
                 <?php endif; ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="logout.php">Logout</a>
-                </li>
+                
+                    <a class="dropdown-item" href="logout.php">Logout</a>
+                
             <?php else: ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
+                
+                    <a class="dropdown-item" href="login.php">Login</a>
+                
             <?php endif; ?>
+            </div>
+            </div>
         </ul>
     </div>
 </nav>

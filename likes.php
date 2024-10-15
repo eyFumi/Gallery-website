@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_level'] !== 'Admin') {
 $search_query = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $search = '%' . $_GET['search'] . '%'; // Wildcard untuk LIKE
-    $search_query = "WHERE f.JudulFoto LIKE :search OR u.Username LIKE :search";
+    $search_query = "WHERE f.JudulFoto LIKE :search OR u.Username LIKE :search OR LikeID LIKE :search";
 }
 
 // Ambil semua like foto dari database dengan JOIN
@@ -137,46 +137,94 @@ $likes = $stmt_likes->fetchAll();
         tr:hover {
             background-color: #f1f1f1;
         }
+        @media print {
+  /* Sembunyikan semua elemen */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Hanya tampilkan tabel */
+  #myTable, #myTable * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myTable {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #myAction, #myAction * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myAction {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  #myAction, #myAction * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myAction {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+}
     </style>
 </head>
 <body>
 
 <?php require 'dashboard-navbar.php' ?>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Like Foto</li>
+            </ol>
+        </nav>
 
-        <div class="container">
             <h2>Data Like Foto</h2>
+
+            <button class="btn btn-info mb-2" onClick="window.print()"><i class="fas fa-print"></i> Cetak</button>
 
             <!-- Form Pencarian -->
             <form method="get" action="">
                 <input type="text" name="search" placeholder="Cari judul foto atau username..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" class="form-control d-inline-block" style="width: 70%;">
-                <button type="submit" class="btn btn-primary">Cari</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
             </form>
 
-            <table>
+            <table id="myTable">
                 <thead>
                     <tr>
-                        <th>ID Like</th>
-                        <th>ID Foto</th>
-                        <th>Judul Foto</th>
-                        <th>User ID</th>
-                        <th>Username</th>
-                        <th>Tanggal Like</th>
-                        <th>Aksi</th>
+                        <th class="text-center">ID Like</th>
+                        
+                        <th class="text-center">Judul Foto</th>
+                        
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Tanggal Like</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (count($likes) > 0): ?>
                         <?php foreach ($likes as $like): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($like['LikeID']); ?></td>
-                            <td><?php echo htmlspecialchars($like['FotoID']); ?></td>
-                            <td><?php echo htmlspecialchars($like['JudulFoto']); ?></td>
-                            <td><?php echo htmlspecialchars($like['UserID']); ?></td>
-                            <td><?php echo htmlspecialchars($like['Username']); ?></td>
-                            <td><?php echo htmlspecialchars($like['TanggalLike']); ?></td>
-                            <td>
+                            <td class="text-center"><?php echo htmlspecialchars($like['LikeID']); ?></td>
+                            
+                            <td class="text-center"><?php echo htmlspecialchars($like['JudulFoto']); ?></td>
+                            
+                            <td class="text-center"><?php echo htmlspecialchars($like['Username']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($like['TanggalLike']); ?></td>
+                            <td class="text-center">
                                 <div class="action-buttons">
-                                    <a href="delete_like.php?LikeID=<?php echo $like['LikeID']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus like ini?');">Hapus</a>
+                                    <a href="delete_like.php?LikeID=<?php echo $like['LikeID']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus like ini?');"><i class="fa-solid fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -189,7 +237,6 @@ $likes = $stmt_likes->fetchAll();
                 </tbody>
             </table>
         </div>
-    </div>
 
     <script>
         function toggleSidebar() {

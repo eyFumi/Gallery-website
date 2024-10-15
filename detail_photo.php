@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     <a href="gallery.php" class="btn btn-secondary mt-3"><i class="fa-solid fa-circle-left"></i></a>
     <div class="row mt-3">
         <div class="col-md-6">
-            <img src="<?php echo htmlspecialchars($photo['LokasiFile']); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($photo['JudulFoto']); ?>">
+            <img src="<?php echo htmlspecialchars($photo['LokasiFile']); ?>" class="img-fluid" alt="<?php echo htmlspecialchars($photo['JudulFoto']); ?>" style="width:540px; height:360px; object-fit:cover; object-position:center;">
             <h5>Likes: <?php echo $likes_count; ?></h5>
             <form id="likeForm" method="post" class="mb-3">
                 <input type="hidden" name="foto_id" value="<?php echo $foto_id; ?>">
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 
             <h5>Komentar:</h5>
             <form id="commentForm" method="post" class="mb-3">
-                <input type="text" name="isi_komentar" class="form-control" placeholder="Tulis komentar..." required>
+                <input type="text" name="isi_komentar" class="form-control" placeholder="Tulis komentar..." autocomplete="off" required>
                 <button type="button" onclick="checkLoginAndProceed('commentForm')" class="btn btn-primary mt-2">Kirim</button>
             </form>
 

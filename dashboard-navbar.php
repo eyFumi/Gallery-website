@@ -2,7 +2,7 @@
         <h3 class="text-dark text-center">Admin Menu</h3>
         
         <a href="dashboard.php">Dashboard</a>
-        <a href="admin-dashboard.php">User</a>
+        <a href="users.php">User</a>
         <a href="albums.php">Album</a>
         <a href="photos.php">Foto</a>
         <a href="comments.php">Komentar Foto</a>

@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
 $search_query = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $search = '%' . $_GET['search'] . '%'; // Gunakan wildcard untuk LIKE
-    $search_query = "WHERE a.NamaAlbum LIKE :search OR a.Deskripsi LIKE :search OR u.Username LIKE :search";
+    $search_query = "WHERE a.NamaAlbum LIKE :search OR a.Deskripsi LIKE :search OR u.Username LIKE :search OR AlbumID LIKE :search";
 }
 
 // Ambil semua album dari database dengan JOIN untuk mendapatkan Username
@@ -159,15 +159,64 @@ $albums = $stmt_albums->fetchAll();
             background-color: #f1f1f1;
         }
 
+        @media print {
+  /* Sembunyikan semua elemen */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Hanya tampilkan tabel */
+  #myTable, #myTable * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myTable {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #myAction, #myAction * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myAction {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  #myAction, #myAction * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myAction {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+}
     </style>
 </head>
 <body>
 <?php require 'dashboard-navbar.php' ?>
-
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Album</li>
+            </ol>
+        </nav>
         <h2>Data Album</h2>
 
         <!-- Tombol untuk membuka modal tambah album -->
-        <button class="btn btn-success mb-2" data-toggle="modal" data-target="#addAlbumModal">Tambah Album</button>
+         <div class="mb-2">
+            <button class="btn btn-primary " data-toggle="modal" data-target="#addAlbumModal"><i class="fas fa-plus"></i> Tambah Album</button>
+            <button class="btn btn-info " onClick="window.print()"><i class="fas fa-print"></i> Cetak</button>
+        </div>
 
         <!-- Modal untuk tambah album -->
         <div class="modal fade" id="addAlbumModal" tabindex="-1" role="dialog" aria-labelledby="addAlbumModalLabel" aria-hidden="true">
@@ -204,33 +253,33 @@ $albums = $stmt_albums->fetchAll();
         <!-- Form Pencarian -->
         <form method="get" action="">
             <input type="text" name="search" placeholder="Cari album, deskripsi, atau username..." class="form-control d-inline-block" style="width: 70%;" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-            <button type="submit" class="btn btn-primary">Cari</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
 
-        <table>
+        <table id="myTable">
             <thead>
                 <tr>
-                    <th>ID Album</th>
-                    <th>Nama Album</th>
-                    <th>Deskripsi Album</th>
-                    <th>Tanggal Buat</th>
-                    <th>Username</th>
-                    <th>Aksi</th>
+                    <th class="text-center">ID Album</th>
+                    <th class="text-center">Nama Album</th>
+                    <th class="text-center">Deskripsi Album</th>
+                    <th class="text-center">Tanggal Buat</th>
+                    <th class="text-center">Username</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($albums) > 0): ?>
                     <?php foreach ($albums as $album): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($album['AlbumID']); ?></td>
-                        <td><?php echo htmlspecialchars($album['NamaAlbum']); ?></td>
-                        <td><?php echo htmlspecialchars($album['Deskripsi']); ?></td>
-                        <td><?php echo htmlspecialchars($album['TanggalDibuat']); ?></td>
-                        <td><?php echo htmlspecialchars($album['Username']); ?></td>
-                        <td>
+                        <td class="text-center"><?php echo htmlspecialchars($album['AlbumID']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($album['NamaAlbum']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($album['Deskripsi']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($album['TanggalDibuat']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($album['Username']); ?></td>
+                        <td class="text-center">
                             <div class="action-buttons">
-                                <a href="edit_album.php?AlbumID=<?php echo $album['AlbumID']; ?>" class="btn btn-warning">Edit</a>
-                                <a href="delete_album.php?AlbumID=<?php echo $album['AlbumID']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus album ini beserta foto-fotonya?');">Hapus</a>
+                                <a href="edit_album.php?AlbumID=<?php echo $album['AlbumID']; ?>" class="btn btn-warning" ><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="delete_album.php?AlbumID=<?php echo $album['AlbumID']; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus album ini beserta foto-fotonya?');"><i class="fa-solid fa-trash"></i></a>
                             </div>
                         </td>
                     </tr>

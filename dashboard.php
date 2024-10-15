@@ -140,7 +140,14 @@ $jumlahLikes = $queryLikes->fetchColumn();
 
 <body>
 <?php require 'dashboard-navbar.php' ?>
-
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                </ol>
+            </nav>
+        </div>
+        
         <div class="container mt-5">
         
 
@@ -154,7 +161,7 @@ $jumlahLikes = $queryLikes->fetchColumn();
                         <div class="col-6">
                             <p class="summary">User</p>
                             <p><?php echo $jumlahUser; ?> User</p>
-                            <p><a href="admin-dashboard.php " class="text-dark text-decoration-none">Lihat Detail</a></p>
+                            <p><a href="users.php " class="text-dark text-decoration-none">Lihat Detail</a></p>
                         </div>
                     </div>
                 </div>

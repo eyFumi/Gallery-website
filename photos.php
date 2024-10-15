@@ -78,7 +78,7 @@ if ($uploadOk == 1) {
 $search_query = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $search = '%' . $_GET['search'] . '%'; // Wildcard untuk LIKE
-    $search_query = "WHERE f.JudulFoto LIKE :search OR f.DeskripsiFoto LIKE :search OR a.NamaAlbum LIKE :search OR u.Username LIKE :search";
+    $search_query = "WHERE f.JudulFoto LIKE :search OR f.DeskripsiFoto LIKE :search OR a.NamaAlbum LIKE :search OR u.Username LIKE :search OR FotoID LIKE :search";
 }
 
 // Ambil semua foto dari database dengan JOIN untuk mendapatkan Nama Album dan Username
@@ -211,18 +211,65 @@ $albums = $stmt_albums->fetchAll();
             background-color: #f1f1f1;
         }
 
+        @media print {
+  /* Sembunyikan semua elemen */
+  body * {
+    visibility: hidden;
+  }
 
+  /* Hanya tampilkan tabel */
+  #myTable, #myTable * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myTable {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  #myAction, #myAction * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myAction {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  #myAction, #myAction * {
+    visibility: visible;
+  }
+
+  /* Pastikan tabel tetap pada layout yang benar */
+  #myAction {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+}
     </style>
 </head>
 <body>
 
 <?php require 'dashboard-navbar.php' ?>
-
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="dashboard.php" class="text-decoration-none text-muted"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Foto</li>
+            </ol>
+        </nav>
         <h2>Data Foto</h2>
 
         <!-- Tombol untuk membuka modal tambah foto -->
-        <button class="btn btn-success mb-2" data-toggle="modal" data-target="#addPhotoModal">Tambah Foto</button>
-
+         <div class="mb-2">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addPhotoModal"><i class="fas fa-plus"></i> Tambah Foto</button>
+            <button class="btn btn-info " onClick="window.print()"><i class="fas fa-print"></i> Cetak</button>
+        </div>
         <!-- Modal untuk tambah foto -->
         <div class="modal fade" id="addPhotoModal" tabindex="-1" role="dialog" aria-labelledby="addPhotoModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -270,39 +317,39 @@ $albums = $stmt_albums->fetchAll();
         <!-- Form Pencarian -->
         <form method="get" action="">
             <input type="text" name="search" placeholder="Cari judul, deskripsi, album, atau username..." class="form-control d-inline-block" style="width: 70%;" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-            <button type="submit" class="btn btn-primary">Cari</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i></button>
         </form>
 
-        <table>
+        <table id="myTable">
             <thead>
                 <tr>
-                    <th>ID Foto</th>
-                    <th>Judul Foto</th>
-                    <th>Deskripsi</th>
-                    <th>Tanggal Unggah</th>
-                    <th>Gambar</th>
-                    <th>Nama Album</th>
-                    <th>Username</th>
-                    <th>Aksi</th>
+                    <th class="text-center">ID Foto</th>
+                    <th class="text-center">Judul Foto</th>
+                    <th class="text-center">Deskripsi</th>
+                    <th class="text-center">Tanggal Unggah</th>
+                    <th class="text-center">Gambar</th>
+                    <th class="text-center">Nama Album</th>
+                    <th class="text-center">Username</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($photos) > 0): ?>
                     <?php foreach ($photos as $photo): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($photo['FotoID']); ?></td>
-                        <td><?php echo htmlspecialchars($photo['JudulFoto']); ?></td>
-                        <td><?php echo htmlspecialchars($photo['DeskripsiFoto']); ?></td>
-                        <td><?php echo htmlspecialchars($photo['TanggalUnggah']); ?></td>
-                        <td>
-                            <img src="<?php echo htmlspecialchars($photo['LokasiFile']); ?>" alt="Gambar Foto" style="max-width: 100px; height: auto; border-radius: 5px;">
+                        <td class="text-center"><?php echo htmlspecialchars($photo['FotoID']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($photo['JudulFoto']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($photo['DeskripsiFoto']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($photo['TanggalUnggah']); ?></td>
+                        <td class="text-center">
+                            <img src="<?php echo htmlspecialchars($photo['LokasiFile']); ?>" alt="Gambar Foto" style="width: 100px; height: 66px; border-radius: 5px;">
                         </td>
-                        <td><?php echo htmlspecialchars($photo['NamaAlbum']); ?></td>
-                        <td><?php echo htmlspecialchars($photo['Username']); ?></td>
-                        <td>
+                        <td class="text-center"><?php echo htmlspecialchars($photo['NamaAlbum']); ?></td>
+                        <td class="text-center"><?php echo htmlspecialchars($photo['Username']); ?></td>
+                        <td class="text-center">
                             <div class="action-buttons">
-                                <a href="edit_photos.php?FotoID=<?php echo $photo['FotoID']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="delete_photos.php?FotoID=<?php echo $photo['FotoID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus foto ini?');">Hapus</a>
+                                <a href="edit_photos.php?FotoID=<?php echo $photo['FotoID']; ?>" class="btn btn-warning btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <a href="delete_photos.php?FotoID=<?php echo $photo['FotoID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus foto ini?');"><i class="fa-solid fa-trash"></i></a>
                             </div>
                         </td>
                     </tr>

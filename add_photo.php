@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Simpan informasi foto ke database
                 $stmt_photo = $pdo->prepare("INSERT INTO gallery_foto (JudulFoto, DeskripsiFoto, TanggalUnggah, LokasiFile, AlbumID, UserID) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt_photo->execute([$judul_foto, $deskripsi_foto, $tanggal_upload, $target_file, $album_id, $user_id]);
-                echo "<div class='alert alert-success' role='alert'>Foto berhasil ditambahkan ke album! Silakan <a href='album.php' class='alert-link'>kembali ke album</a>.</div>";
+                echo "<div class='alert alert-success' role='alert'>Foto berhasil ditambahkan ke album! Silakan <a href='gallery.php' class='alert-link'>kembali ke Gallery</a>.</div>";
             } else {
                 echo "<div class='alert alert-danger' role='alert'>Maaf, terjadi kesalahan saat meng-upload file.</div>";
             }
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group form">
                 <label>Judul Foto:</label>
-                <input type="text" name="judul_foto" class="form-control" required>
+                <input type="text" name="judul_foto" class="form-control" autocomplete="off" required>
             </div>
 
             <div class="form-group">
